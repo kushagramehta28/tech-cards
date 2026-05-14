@@ -1,6 +1,8 @@
 from datetime import datetime
 import sys
 import re
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 
 sys.path.append('../../CloudflareBypassForScraping-main')  # Go two levels up and then into the folder
 
@@ -90,6 +92,25 @@ def link_builder(driver):
 
     return urls
 
+def embedding_builder(text, content):
+    # Create the embedding text
+    embedding_text = f"""
+        Title: {text}
+
+        Content:
+        {content}
+    """
+
+    model = SentenceTransformer("BAAI/bge-small-en-v1.5")
+
+    embedding = model.encode(
+        embedding_text,
+        normalize_embeddings=True # Normalize the embeddings to unit length so that cosine similarity can be used directly
+    )
+
+    return embedding
+
+
 def json_parser(json_data):
     story = json_data["pageProps"]["storyData"]
     title = story["title"]
@@ -135,6 +156,10 @@ def json_parser(json_data):
     content = "\n\n".join(paragraphs)
     summary = summarize_text(content)
     print("Content Summary:", summary)
+
+    # Get embedding for the article
+    embedding = embedding_builder(title, content)
+    print("Embedding:", embedding)
 
 def browser_quit(driver):
     driver.quit()
