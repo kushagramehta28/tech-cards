@@ -3,23 +3,17 @@ import modules
 # Start the browser and bypass Cloudflare
 driver = modules.start_browser()
 
-# Click the 'See More' button multiple times to load more articles
+# Click the 'See More' button to load more articles
 modules.see_more(driver)
 
 # Extract article links
-links = modules.get_links(driver)
+links = modules.link_builder(driver)
 
-# Extract HTML from each link
+# Fetch JSON data for each article and parse it
 for link in links:
-    html_content = modules.read_html(driver, link)
-    info = modules.parse_html(html_content)
-    summary = modules.summarize_text(info['content'])
-    print("Title:", info['title'])
-    print("Author:", info['author'])
-    print("Date:", info['date'])
-    print("Image URL:", info['image_url'])
-    print("Source:", info['source'])
-    print("Content Summary:", summary)
+    json_data = modules.fetch_json(driver, link)
+    # Parse and print the article details
+    modules.json_parser(json_data)
 
 # Quit the browser
 modules.browser_quit(driver)

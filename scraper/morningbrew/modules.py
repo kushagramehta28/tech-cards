@@ -1,10 +1,18 @@
+from datetime import datetime
 import sys
+import re
+
 sys.path.append('../../CloudflareBypassForScraping-main')  # Go two levels up and then into the folder
 
 from CloudflareBypasser import CloudflareBypasser 
 from DrissionPage import ChromiumPage
-from bs4 import BeautifulSoup
 from transformers import pipeline
+
+# Set up the summarization pipeline globally to avoid reinitialization in the loop
+summarizer = pipeline(
+    "summarization",
+    model="facebook/bart-large-cnn"
+)
 
 def start_browser():
     # Initialize ChromiumPage
@@ -17,65 +25,121 @@ def start_browser():
 
     return driver 
 
+def fetch_json(driver, url):
+    # Fetch JSON data from the given URL using JavaScript execution in the browser context
+    data = driver.run_js("""
+        return fetch(arguments[0], {
+            credentials: 'include'
+        })
+        .then(r => r.json())
+    """, url)
+    return data
+
 def see_more(driver):
     # Find and click the 'See More' button by tag and text (5 times)
     for _ in range(5):
-        see_more_btn = driver.ele('tag:button@class=Button__StyledButton-sc-44e5f0-0 cIZEHT btn btn-primary')
+        # Try to find the 'See More' button and click it
+        see_more_btn = driver.ele('tag:button@@text():See More')
+
         if see_more_btn:
             print('See More button found, clicking...')
             see_more_btn.click()
         else:
             print('See More button not found.')
 
-def get_links(driver):
-    # Get all article links
-    elements = driver.eles('tag:a@class=style__PreviewCardLink-sc-939db8c6-0 HcAsw preview')
-    links = []
-    for element in elements:
-        href = element.attr('href')
-        links.append(href)
-    return links
+def link_builder(driver):
+    # Get HTML of home page
+    html = driver.html
+
+    # Extract build ID only
+    build_match = re.search(
+        r'/_next/static/([^/]+)/_ssgManifest\.js',
+        html
+    )
+
+    if not build_match:
+        print("Build ID not found")
+        return []
+
+    build_id = build_match.group(1)
+
+    # Extract all story paths
+    stories = re.findall(
+        r'<a[^>]+href="(/stories/[^"]+)"',
+        html
+    )
+
+    if not stories:
+        print("Story paths not found")
+        return []
+
+    # Remove duplicates
+    stories = list(set(stories))
+
+    # Build final API URLs
+    urls = []
+
+    for story in stories:
+        api_url = (
+            f"https://www.morningbrew.com/_next/data/"
+            f"{build_id}"
+            f"{story}.json"
+        )
+
+        urls.append(api_url)
+
+    return urls
+
+def json_parser(json_data):
+    story = json_data["pageProps"]["storyData"]
+    title = story["title"]
+    author = story["authors"][0]["name"]
+    
+    # Raw ISO datestring from JSON
+    raw_date = story["publishDate"]
+
+    # Convert to datetime object
+    dt = datetime.strptime(
+        raw_date,
+        "%Y-%m-%dT%H:%M:%S.%fZ"
+    )
+
+    # Nicely formatted date and time
+    date = dt.strftime("%B %d, %Y")
+    time = dt.strftime("%I:%M %p")
+
+    img_url = story["hero"]["image"]["asset"]["url"]
+    source = "morningbrew"
+    article_link = story["shareLinks"]["website"]
+
+    print("Title:", title)
+    print("Author:", author)
+    print("Date:", date)
+    print("Time:", time)
+    print("Image URL:", img_url)
+    print("Source:", source)
+    print("Article URL:", article_link)
+
+    # Parse article body
+    content_blocks = story["content"]
+    paragraphs = []
+    for block in content_blocks:
+        if "children" in block:
+            text = "".join(
+                child.get("text", "")
+                for child in block["children"]
+            )
+            if text.strip():
+                paragraphs.append(text)
+
+    content = "\n\n".join(paragraphs)
+    summary = summarize_text(content)
+    print("Content Summary:", summary)
 
 def browser_quit(driver):
     driver.quit()
 
-def read_html(driver, url):
-    driver.get(url)
-    html = driver.html
-    return html
-
-def parse_html(html):
-    soup = BeautifulSoup(html, 'lxml')
-    # extract title 
-    title = soup.find('h1').text if soup.find('h1') else None
-    # extract content
-    content_div = soup.find('div', id = 'article-body-content')
-    content = content_div.text.strip() if content_div else None
-    # extract author
-    article_info = soup.find('div', id = 'article-details')
-    author = article_info.find('a').text if article_info and article_info.find('a') else None
-    # extract date
-    date = article_info.find('time').text if article_info and article_info.find('time') else None
-    # source
-    source = 'Morning Brew'
-    # extract image url
-    img_div = soup.find('figure') 
-    img_url = img_div.find('img')['src'] if img_div else None
-
-    #Let's contain it in dictionary
-    all_info = {
-        'title': title,
-        'author': author,
-        'date': date,
-        'image_url': img_url,
-        'source': source,
-        'content': content
-    }
-    return all_info
-
 def summarize_text(text):
-    # Set up the summarization pipeline
-    summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
     # Generate summary between 80 to 110 tokens ~ 60-80 words
     summary = summarizer(text, max_length=110, min_length=80, do_sample=False)
     return summary[0]['summary_text']
