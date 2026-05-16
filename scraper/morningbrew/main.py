@@ -9,11 +9,24 @@ modules.see_more(driver)
 # Extract article links
 links = modules.link_builder(driver)
 
-# Fetch JSON data for each article and parse it
+# Fetch JSON data for each article and process it
 for link in links:
     json_data = modules.fetch_json(driver, link)
-    # Parse and print the article details
-    modules.json_parser(json_data)
+
+    result = modules.controller(json_data)
+
+    if result == "url_duplicate":
+        print(f"Duplicate article found for URL: {link}")
+        print("Stopping scraper.")
+        break
+
+    elif result == "semantic_duplicate":
+        print(f"Semantic duplicate found for URL: {link}")
+        print("Skipping article.")
+        continue
+
+    elif result == "inserted":
+        print(f"Article inserted for URL: {link}")
 
 # Quit the browser
 modules.browser_quit(driver)
