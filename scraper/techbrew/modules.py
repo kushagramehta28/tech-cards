@@ -31,7 +31,7 @@ Session = sessionmaker(bind=engine)
 def start_browser():
     # Initialize ChromiumPage
     driver = ChromiumPage()
-    driver.get('http://www.morningbrew.com/tag/tech')
+    driver.get('https://www.techbrew.com/all/stories/news')
 
     # Bypass Cloudflare protection
     cf_bypasser = CloudflareBypasser(driver) 
@@ -51,17 +51,17 @@ def fetch_json(driver, url):
     return data
 
 
-def see_more(driver):
+def more_stories(driver):
     # Find and click the 'See More' button by tag and text (5 times)
     for _ in range(5):
         # Try to find the 'See More' button and click it
-        see_more_btn = driver.ele('tag:button@@text():See More')
+        more_stories_btn = driver.ele('tag:button@@text():More Stories')
 
-        if see_more_btn:
-            print('See More button found, clicking...')
-            see_more_btn.click()
+        if more_stories_btn:
+            print('More Stories button found, clicking...')
+            more_stories_btn.click()
         else:
-            print('See More button not found.')
+            print('More Stories button not found.')
 
 
 def link_builder(driver):
@@ -98,7 +98,7 @@ def link_builder(driver):
 
     for story in stories:
         api_url = (
-            f"https://www.morningbrew.com/_next/data/"
+            f"https://www.techbrew.com/_next/data/"
             f"{build_id}"
             f"{story}.json"
         )
@@ -143,7 +143,7 @@ def parse_metadata(json_data):
     time = dt.strftime("%I:%M %p")
 
     img_url = story["hero"]["image"]["asset"]["url"]
-    source = "morningbrew"
+    source = "techbrew"
     article_link = story["shareLinks"]["website"]
 
     print("Title:", title)
