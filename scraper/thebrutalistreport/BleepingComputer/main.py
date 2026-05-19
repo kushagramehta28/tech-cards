@@ -37,12 +37,8 @@ def scrape_bleepingcomputer(article_link):
             raw_date.replace("Z", "+00:00")
         )
 
-        date = dt.strftime("%B %d, %Y")
-        time = dt.strftime("%I:%M %p")
-
     else:
-        date = "Unknown"
-        time = "Unknown"
+        dt = "Unknown"
 
     # SOURCE
     source = "Bleeping Computer"
@@ -65,14 +61,11 @@ def scrape_bleepingcomputer(article_link):
     return {
         "title": title,
         "author": author,
-        "date": date,
-        "time": time,
+        "dt": dt,
         "image_url": img_url,
         "source": source,
         "article_url": article_link,
         "content": content
     }
 
-scrape_bleepingcomputer(
-    "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-patching-issues-in-restricted-windows-networks/"
-)
+#scrape_bleepingcomputer("https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-patching-issues-in-restricted-windows-networks/")

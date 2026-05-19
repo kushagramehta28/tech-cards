@@ -22,14 +22,15 @@ def scrape_arstechnica(url):
 
     # Author
     author = None
-    author_meta = soup.find("meta", attrs={"name": "author"})
-
-    if author_meta:
-        author = author_meta.get("content")
+    author_tag = soup.select_one(
+        'div.font-impact a[href*="/author/"]'
+    )
+    if author_tag:
+        author = author_tag.get_text(strip=True)
 
     # Date and Time
-    date = None
-    time = None
+    dt = None
+
     published_meta = soup.find(
         "meta",
         property="article:published_time"
@@ -38,8 +39,6 @@ def scrape_arstechnica(url):
         dt = datetime.fromisoformat(
             published_meta["content"]
         )
-        date = dt.strftime("%d %B %Y")
-        time = dt.strftime("%I:%M %p")
 
     # Image URL
     img_url = None
@@ -81,15 +80,11 @@ def scrape_arstechnica(url):
     return {
         "title": title,
         "author": author,
-        "date": date,
-        "time": time,
+        "dt": dt,
         "image_url": img_url,
         "source": "Ars Technica",
         "article_url": url,
         "content": content
     }
 
-
-scrape_arstechnica(
-    "https://arstechnica.com/tech-policy/2026/05/iran-demands-big-tech-pay-fees-for-undersea-internet-cables-in-strait-of-hormuz/"
-)
+# print(scrape_arstechnica("https://arstechnica.com/tech-policy/2026/05/iran-demands-big-tech-pay-fees-for-undersea-internet-cables-in-strait-of-hormuz/"))

@@ -34,12 +34,8 @@ def scrape_theverge(article_link):
             raw_date.replace("Z", "+00:00")
         )
 
-        date = dt.strftime("%B %d, %Y")
-        time = dt.strftime("%I:%M %p")
-
     else:
-        date = "Unknown"
-        time = "Unknown"
+        dt = "Unknown"
 
     # SOURCE
     source = "The Verge"
@@ -62,8 +58,7 @@ def scrape_theverge(article_link):
     return {
         "title": title,
         "author": author,
-        "date": date,
-        "time": time,
+        "dt" : dt,
         "image_url": img_url,
         "source": source,
         "article_url": article_link,
@@ -71,6 +66,4 @@ def scrape_theverge(article_link):
     }
 
 
-scrape_theverge(
-    "https://www.theverge.com/tech/928420/anker-solix-s2000-power-station"
-)
+#scrape_theverge("https://www.theverge.com/tech/928420/anker-solix-s2000-power-station")

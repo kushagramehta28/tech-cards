@@ -47,16 +47,18 @@ def scrape_brutalist_report():
         # Find all article links inside ul
         ul = publisher_div.find("ul")
 
-        if not ul:
-            continue
+        list_items = ul.find_all("li")
 
-        links = ul.find_all("a", href=True)
+        for li in list_items:
 
-        for link in links:
+            # Get ONLY the first link inside each li
+            first_link = li.find("a", href=True)
 
-            title = link.get_text(strip=True)
-            article_url = link["href"]
+            if not first_link:
+                continue
 
+            title = first_link.get_text(strip=True)
+            article_url = first_link["href"]
             results.append({
                 "publisher": publisher_name,
                 "title": title,
