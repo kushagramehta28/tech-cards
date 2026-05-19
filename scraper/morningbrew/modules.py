@@ -214,7 +214,7 @@ def semantic_check(embedding, session):
             return "semantic_duplicate" 
         
         return "not_duplicate"
-
+    
 
 def add_article_to_db(title, summary, author, source, article_link, img_url, embedding, published_at, session):
     article = Article(
