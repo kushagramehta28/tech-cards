@@ -35,7 +35,7 @@ def scrape_phoronix(article_link):
         )
 
     else:
-        dt = "Unknown"
+        dt = None
 
     # SOURCE
     source = "phoronix"

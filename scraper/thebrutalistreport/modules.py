@@ -1,7 +1,7 @@
-from ArsTechnica.main import scrape_arstechnica
-from theverge.main import scrape_theverge
-from Phoronix.main import scrape_phoronix
-from BleepingComputer.main import scrape_bleepingcomputer
+from .ArsTechnica.main import scrape_arstechnica
+from .theverge.main import scrape_theverge
+from .Phoronix.main import scrape_phoronix
+from .BleepingComputer.main import scrape_bleepingcomputer
 
 from datetime import datetime, timedelta, timezone
 import sys
@@ -11,8 +11,8 @@ sys.path.append('../../database') # Add the database directory to the path to im
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select
-from database import engine
-from models import Article
+from database.database import engine
+from database.models import Article
 
 from transformers import pipeline
 
@@ -48,7 +48,8 @@ def url_exists(article_url, session):
 
 def summarize_text(text):
     # Generate summary between 80 to 110 tokens ~ 60-80 words
-    summary = summarizer(text, max_length=110, min_length=80, do_sample=False)
+    # Truncate text to first 3000 characters to avoid hitting model limits and to ensure the most relevant content is summarized
+    summary = summarizer(text[:3000], max_length=110, min_length=80, do_sample=False)
     return summary[0]['summary_text']
 
 def embedding_builder(text, content):
@@ -153,8 +154,12 @@ def controller(article):
     content = scraped_data['content']
 
 
-    date = published_at.strftime("%B %d, %Y")
-    time = published_at.strftime("%I:%M %p")
+    if published_at:
+        date = published_at.strftime("%B %d, %Y")
+        time = published_at.strftime("%I:%M %p")
+    else:
+        date = "Unknown"
+        time = "Unknown"
 
     session = Session()
     try:

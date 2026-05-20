@@ -35,7 +35,7 @@ def scrape_theverge(article_link):
         )
 
     else:
-        dt = "Unknown"
+        dt = None
 
     # SOURCE
     source = "The Verge"

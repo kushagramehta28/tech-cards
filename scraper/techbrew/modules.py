@@ -7,12 +7,12 @@ sys.path.append('../../database') # Add the database directory to the path to im
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select
-from database import engine
-from models import Article
+from database.database import engine
+from database.models import Article
 
 sys.path.append('../../CloudflareBypassForScraping-main')  # Go two levels up and then into the folder
 
-from CloudflareBypasser import CloudflareBypasser 
+from CloudflareBypassForScraping_main.CloudflareBypasser import CloudflareBypasser 
 from DrissionPage import ChromiumPage
 from transformers import pipeline
 
@@ -243,7 +243,8 @@ def browser_quit(driver):
 
 def summarize_text(text):
     # Generate summary between 80 to 110 tokens ~ 60-80 words
-    summary = summarizer(text, max_length=110, min_length=80, do_sample=False)
+    # Truncate text to first 3000 characters to avoid hitting model limits and to ensure the most relevant content is summarized
+    summary = summarizer(text[:3000], max_length=110, min_length=80, do_sample=False)
     return summary[0]['summary_text']
 
 

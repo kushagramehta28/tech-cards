@@ -38,7 +38,7 @@ def scrape_bleepingcomputer(article_link):
         )
 
     else:
-        dt = "Unknown"
+        dt = None
 
     # SOURCE
     source = "Bleeping Computer"
