@@ -37,6 +37,7 @@ def start_browser():
         co.set_argument('--no-sandbox')
         co.set_argument('--disable-gpu')
         co.set_argument('--disable-dev-shm-usage')
+        co.set_argument('--remote-allow-origins=*')
 
     # Initialize ChromiumPage with options
     driver = ChromiumPage(addr_or_opts=co)
