@@ -1,0 +1,13 @@
+pgvector==0.4.2 
+psycopg2-binary==2.9.12 
+sqlalchemy==2.0.49
+requests 
+passlib[bcrypt]
+python-jose[cryptography]
+email-validator
+pydantic
+fastapi
+uvicorn
+python-dotenv
+bcrypt==4.0.1
+apscheduler
