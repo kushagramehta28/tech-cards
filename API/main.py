@@ -1,6 +1,14 @@
+import sys
+import os
+
+# Add project root, API, and database directories to python path for production hosting
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(base_dir)
+sys.path.append(os.path.join(base_dir, "API"))
+sys.path.append(os.path.join(base_dir, "database"))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import os
 import requests
 
 from routes.auth import router as auth_router
