@@ -1,0 +1,23 @@
+:root {
+  /* COLORS */
+  --color-background: #f3f3f3;
+  --color-card: #d9d9d9;
+  --color-text-primary: #111111;
+  --color-text-secondary: #666666;
+  --color-accent: #000000;
+
+
+  /* RADIUS */
+  --radius-card: 48px;
+  --radius-image: 20px;
+
+
+  /* SPACING */
+  --container-width: 662.61px;
+  --container-height: 662.61px;
+  --image-height: 250.88px;
+
+
+  /* TRANSITIONS */
+  --transition-default: 300ms ease;
+}

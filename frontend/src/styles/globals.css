@@ -1,0 +1,119 @@
+/* Space Grotesk font */
+@import url('https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&family=Cormorant+Garamond:wght@700&family=Space+Grotesk:wght@300..700&display=swap');
+/* Plus Jakarta Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&family=Cormorant+Garamond&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Space+Grotesk:wght@300..700&display=swap');
+
+@import "tailwindcss";
+
+@import "./variables.css";
+@import "./typography.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+}
+
+/* PREMIUM CARD SWIPE KEYFRAMES */
+@keyframes slideOutLeft {
+  0% { transform: translateX(0); opacity: 1; filter: blur(0px); }
+  100% { transform: translateX(-100%) scale(0.95); opacity: 0; filter: blur(4px); }
+}
+@keyframes slideInRight {
+  0% { transform: translateX(100%) scale(0.95); opacity: 0; filter: blur(4px); }
+  100% { transform: translateX(0); opacity: 1; filter: blur(0px); }
+}
+
+@keyframes slideOutRight {
+  0% { transform: translateX(0); opacity: 1; filter: blur(0px); }
+  100% { transform: translateX(100%) scale(0.95); opacity: 0; filter: blur(4px); }
+}
+@keyframes slideInLeft {
+  0% { transform: translateX(-100%) scale(0.95); opacity: 0; filter: blur(4px); }
+  100% { transform: translateX(0); opacity: 1; filter: blur(0px); }
+}
+
+/* VERTICAL SCREEN KEYFRAMES (MOBILE) */
+@keyframes slideOutUp {
+  0% { transform: translateY(0); opacity: 1; filter: blur(0px); }
+  100% { transform: translateY(-100%) scale(0.95); opacity: 0; filter: blur(4px); }
+}
+@keyframes slideInDown {
+  0% { transform: translateY(100%) scale(0.95); opacity: 0; filter: blur(4px); }
+  100% { transform: translateY(0); opacity: 1; filter: blur(0px); }
+}
+
+@keyframes slideOutDown {
+  0% { transform: translateY(0); opacity: 1; filter: blur(0px); }
+  100% { transform: translateY(100%) scale(0.95); opacity: 0; filter: blur(4px); }
+}
+@keyframes slideInUp {
+  0% { transform: translateY(-100%) scale(0.95); opacity: 0; filter: blur(4px); }
+  100% { transform: translateY(0); opacity: 1; filter: blur(0px); }
+}
+
+/* TRANSITION UTILITY CLASSES */
+.animate-slide-out-next {
+  animation: slideOutLeft 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.animate-slide-in-next {
+  animation: slideInRight 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.animate-slide-out-prev {
+  animation: slideOutRight 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.animate-slide-in-prev {
+  animation: slideInLeft 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@media (max-width: 767px) {
+  .animate-slide-out-next {
+    animation: slideOutUp 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .animate-slide-in-next {
+    animation: slideInDown 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .animate-slide-out-prev {
+    animation: slideOutDown 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .animate-slide-in-prev {
+    animation: slideInUp 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+}
+
+/* PREMIUM TRANSLUCENT CUSTOM SCROLLBAR FOR CARDS */
+.custom-card-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.custom-card-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-card-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-card-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  transition: background-color 0.2s;
+}
+
+.custom-card-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}

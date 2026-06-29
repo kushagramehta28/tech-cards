@@ -2,6 +2,10 @@ from passlib.context import CryptContext
 from jose import jwt, JWTError
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer
+from fastapi import Depends
+from typing import Optional
+optional_oauth2_scheme = HTTPBearer(auto_error=False)
 from datetime import datetime, timedelta, timezone
 import os
 from dotenv import load_dotenv
@@ -20,6 +24,18 @@ pwd_context = CryptContext(
     schemes=["bcrypt"], # Use bcrypt algorithm for hashing passwords
     deprecated="auto"
 )
+
+def get_optional_user(
+    token = Depends(optional_oauth2_scheme)
+):
+    if not token:
+        return None
+    try:
+        return get_current_user(
+            token.credentials
+        )
+    except:
+        return None
 
 def hash_password(password: str):
     return pwd_context.hash(password)

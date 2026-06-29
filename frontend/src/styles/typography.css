@@ -1,0 +1,10 @@
+:root {
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+
+  --text-display: 4rem;
+  --text-heading: 1.693rem;
+  --text-body: 1.106rem;
+  --text-small: 0.901rem;
+}
+

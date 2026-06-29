@@ -14,7 +14,9 @@ class ArticleResponse(BaseModel):
 
     image_url: str | None
 
-    published_at: datetime
+    published_at: datetime | None
+
+    isBookmarked: bool = False
 
     class Config:
         from_attributes = True

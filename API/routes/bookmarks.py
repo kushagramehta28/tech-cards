@@ -81,9 +81,11 @@ def get_bookmarks(current_user: User = Depends(get_current_user)):
         result = []
 
         for bookmark, article in bookmarks:
+
             result.append({
                 "article_id": article.id,
-                "title": article.title
+                "title": article.title,
+                "content": article.summary
             })
 
         return result
