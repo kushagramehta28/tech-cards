@@ -24,7 +24,7 @@ jobs:
       - name: Install System Dependencies for Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y libxvfb1 # Required for headless virtual framebuffers if needed
+          sudo apt-get install -y xvfb
 
       - name: Install Python Dependencies
         run: |
@@ -37,5 +37,5 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           PYTHONUNBUFFERED: "1"
         run: |
-          # We run scraper/main.py directly
-          python -m scraper.main
+          # Use xvfb-run to provide a virtual display for Chrome/DrissionPage
+          xvfb-run python -m scraper.main
