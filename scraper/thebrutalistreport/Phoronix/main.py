@@ -11,6 +11,9 @@ def scrape_phoronix(article_link):
     }
 
     response = requests.get(article_link, headers=headers)
+    if response.status_code != 200:
+        print(f"Failed to fetch Phoronix page. HTTP Status: {response.status_code}")
+        return None
 
     extracted = trafilatura.extract(
         response.text,

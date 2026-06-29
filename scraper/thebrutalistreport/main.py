@@ -18,6 +18,11 @@ def main():
             print("Skipping article.")
             continue
 
+        elif result in ["cloudflare_blocked", "invalid_data"]:
+            print(f"Skipping article for URL: {article['url']} (unusable content or Cloudflare blocked).")
+            print("=" * 80)
+            continue
+
         elif result == "inserted":
             print(f"Article inserted for URL: {article['url']}")
             print("=" * 80)

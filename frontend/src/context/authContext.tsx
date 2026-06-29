@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react"
+import { api } from "../services/api"
 
 interface AuthContextType {
   token: string | null
@@ -79,6 +80,23 @@ export function AuthProvider({
     setToken(null)
     setEmail(null)
   }
+
+  /* AUTOMATIC LOGOUT ON 401 UNAUTHORIZED */
+  useEffect(() => {
+    const interceptor = api.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          logout()
+        }
+        return Promise.reject(error)
+      }
+    )
+
+    return () => {
+      api.interceptors.response.eject(interceptor)
+    }
+  }, [])
 
 
   return (

@@ -145,13 +145,26 @@ def controller(article):
     scraper_function = SCRAPER_MAP.get(publisher)
     scraped_data = scraper_function(url)
 
-    title = scraped_data['title']
-    author = scraped_data['author']
-    published_at = scraped_data['dt'] # This is the datetime object returned by the scrapers
-    image_url = scraped_data['image_url']
-    source = scraped_data['source']
-    article_url = scraped_data['article_url']
-    content = scraped_data['content']
+    if not scraped_data:
+        print(f"Skipping article for URL: {url} due to failed scrape (no data returned).")
+        return "invalid_data"
+
+    title = scraped_data.get('title')
+    content = scraped_data.get('content')
+
+    if not title or not content:
+        print(f"Skipping article for URL: {url} due to missing title or content.")
+        return "invalid_data"
+
+    if title.strip().lower() in ["just a moment...", "attention required!", "checking your browser..."]:
+        print(f"Skipping article for URL: {url} due to Cloudflare block/challenge page.")
+        return "cloudflare_blocked"
+
+    author = scraped_data.get('author')
+    published_at = scraped_data.get('dt') # This is the datetime object returned by the scrapers
+    image_url = scraped_data.get('image_url')
+    source = scraped_data.get('source')
+    article_url = scraped_data.get('article_url')
 
 
     if published_at:

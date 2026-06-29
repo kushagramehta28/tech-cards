@@ -4,7 +4,7 @@ import type { Article } from "../types/article"
 import type { BookmarkResponse, BookmarkItem } from "../types/bookmark"
 import type { LoginRequest, SignupRequest, AuthResponse } from "../types/auth"
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: "http://127.0.0.1:8000",
 })
 
