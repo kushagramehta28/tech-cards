@@ -257,11 +257,13 @@ function App() {
             relative
             flex
             flex-1
-            items-center
+            items-start
             justify-center
             overflow-hidden
             px-6
-            py-6
+            pt-2
+            pb-6
+            md:items-center
             md:px-0
             md:py-0
           "

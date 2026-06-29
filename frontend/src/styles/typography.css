@@ -8,3 +8,12 @@
   --text-small: 0.901rem;
 }
 
+@media (max-width: 767px) {
+  :root {
+    --text-display: 2.5rem;
+    --text-heading: 1.35rem;
+    --text-body: 0.95rem;
+    --text-small: 0.8rem;
+  }
+}
+

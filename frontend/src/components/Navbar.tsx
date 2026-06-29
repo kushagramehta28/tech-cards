@@ -41,8 +41,10 @@ export default function Navbar({
         items-center
         justify-between
         bg-[var(--color-background)]
-        px-8
-        py-4
+        px-6
+        py-3
+        md:px-8
+        md:py-4
       "
     >
 
