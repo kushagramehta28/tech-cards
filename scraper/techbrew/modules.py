@@ -33,7 +33,7 @@ def start_browser():
     co = ChromiumOptions()
     # Add head-mode flags if running in GitHub Actions or CI environment
     if os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("CI") == "true":
-        co.set_argument('--headless=new')
+        co.headless(True)
         co.set_argument('--no-sandbox')
         co.set_argument('--disable-gpu')
         co.set_argument('--disable-dev-shm-usage')
