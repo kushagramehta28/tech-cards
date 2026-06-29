@@ -18,24 +18,7 @@ export default function BookmarksView({ onLogoClick }: BookmarksViewProps) {
 
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null)
   const [selectedArticleLoading, setSelectedArticleLoading] = useState(false)
-  const [scale, setScale] = useState(1)
 
-  /* SCALE CARDS PROPORTIONALLY ON SMALLER VIEWPORTS */
-  useEffect(() => {
-    function handleResize() {
-      const containerWidth = 662.61
-      const padding = 32 // 16px padding on each side
-      const availableWidth = window.innerWidth - padding
-      if (availableWidth < containerWidth) {
-        setScale(availableWidth / containerWidth)
-      } else {
-        setScale(1)
-      }
-    }
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
 
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([])
   const [bookmarksLoading, setBookmarksLoading] = useState(false)
@@ -237,14 +220,8 @@ export default function BookmarksView({ onLogoClick }: BookmarksViewProps) {
           </div>
 
           {/* SCROLLABLE CONTENT AREA */}
-          <div className="flex-1 overflow-y-auto px-4 py-8 flex items-start justify-center">
-            <div
-              className="w-[var(--container-width)] flex justify-center transition-transform duration-300"
-              style={{
-                transform: `scale(${scale})`,
-                transformOrigin: "top center",
-              }}
-            >
+          <div className="flex-1 overflow-y-auto px-6 py-6 flex items-start justify-center">
+            <div className="w-full max-w-[var(--container-width)] h-[calc(100dvh-120px)] md:h-[var(--container-height)] flex justify-center">
               <ArticleCard
                 article={selectedArticle}
               />

@@ -91,17 +91,18 @@ export default function ArticleCard({
             transition-[transform,opacity]
             duration-[350ms]
             ease-[cubic-bezier(0.25,1,0.5,1)]
+            h-full
 
             ${
                 isPreview
-                ? "scale-[0.78] opacity-25"
+                ? "scale-[0.78] opacity-0 md:opacity-25"
                 : "scale-100 opacity-100"
             }
         `}
       >
 
         {/* TOP ROW */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between shrink-0">
           {/* SOURCE */}
           <p
             className="
@@ -138,135 +139,130 @@ export default function ArticleCard({
             )}
         </div>
 
-        {/* TITLE */}
-        <h1
-          className="
-            mt-3
-            w-full
-            [font-family:var(--font-heading)]
-            font-bold
-            leading-tight
-            text-[var(--color-text-primary)]
-          "
-          style={{
-            fontSize: "var(--text-heading)"
-          }}
-        >
-          {article.title || "Untitled Article"}
-        </h1>
-
-        {/* AUTHOR + DATE ROW */}
-        <div className="mt-2 flex items-center justify-between">
-
-          {/* AUTHOR */}
-          <p
+        {/* SCROLLABLE BODY */}
+        <div className="flex-1 overflow-y-auto custom-card-scrollbar my-4 pr-1 flex flex-col">
+          {/* TITLE */}
+          <h1
             className="
-              [font-family:var(--font-body)]
-              text-[var(--color-text-secondary)]
+              mt-1
+              w-full
+              [font-family:var(--font-heading)]
+              font-bold
+              leading-tight
+              text-[var(--color-text-primary)]
             "
             style={{
-              fontSize: "var(--text-small)"
+              fontSize: "var(--text-heading)"
             }}
           >
-            {article.author || "Unknown Author"}
-          </p>
+            {article.title || "Untitled Article"}
+          </h1>
 
-          {/* DATE */}
-          <p
-            className="
-              [font-family:var(--font-body)]
-              text-[var(--color-text-secondary)]
-            "
-            style={{
-              fontSize: "var(--text-small)"
-            }}
-          >
-            {formatDateToIST(article.published_at)}
-          </p>
-        </div>
-
-
-        {/* IMAGE */}
-        <div className="mt-4 flex justify-center">
-
-          {article.image_url ? (
-
-            <img
-              src={article.image_url}
-              alt={article.title}
-
+          {/* AUTHOR + DATE ROW */}
+          <div className="mt-2 flex items-center justify-between shrink-0">
+            {/* AUTHOR */}
+            <p
               className="
-                max-h-[var(--image-height)]
-                max-w-full
-                rounded-[var(--radius-image)]
-                object-contain
-              "
-            />
-          ) : (
-            <div
-              className="
-                flex
-                h-[var(--image-height)]
-                w-full
-                items-center
-                justify-center
-                rounded-[var(--radius-image)]
-                bg-black/5
                 [font-family:var(--font-body)]
                 text-[var(--color-text-secondary)]
               "
               style={{
-                fontSize: "var(--text-body)"
+                fontSize: "var(--text-small)"
               }}
             >
-              No image available, use your imagination lmao
-            </div>
+              {article.author || "Unknown Author"}
+            </p>
 
-          )}
+            {/* DATE */}
+            <p
+              className="
+                [font-family:var(--font-body)]
+                text-[var(--color-text-secondary)]
+              "
+              style={{
+                fontSize: "var(--text-small)"
+              }}
+            >
+              {formatDateToIST(article.published_at)}
+            </p>
+          </div>
+
+          {/* IMAGE */}
+          <div className="mt-4 flex justify-center shrink-0">
+            {article.image_url ? (
+              <img
+                src={article.image_url}
+                alt={article.title}
+                className="
+                  max-h-[var(--image-height)]
+                  max-w-full
+                  rounded-[var(--radius-image)]
+                  object-contain
+                "
+              />
+            ) : (
+              <div
+                className="
+                  flex
+                  h-[var(--image-height)]
+                  w-full
+                  items-center
+                  justify-center
+                  rounded-[var(--radius-image)]
+                  bg-black/5
+                  [font-family:var(--font-body)]
+                  text-[var(--color-text-secondary)]
+                "
+                style={{
+                  fontSize: "var(--text-body)"
+                }}
+              >
+                No image available, use your imagination lmao
+              </div>
+            )}
+          </div>
+
+          {/* SUMMARY */}
+          <p
+            className="
+              mt-4
+              [font-family:var(--font-body)]
+              leading-relaxed
+              text-[var(--color-text-primary)]
+              font-light
+            "
+            style={{
+              fontSize: "var(--text-body)"
+            }}
+          >
+            {article.summary || "No summary available."}
+          </p>
+
+          {/* ARTICLE LINK */}
+          <a
+            href={article.url || "#"}
+            target="_blank"
+            rel="noreferrer"
+            className="
+              mt-4
+              inline-block
+              [font-family:var(--font-body)]
+              underline
+              transition-opacity
+              duration-300
+              hover:opacity-70
+            "
+            style={{
+              fontSize: "var(--text-body)"
+            }}
+          >
+            View full article
+          </a>
         </div>
-
-        {/* SUMMARY */}
-        <p
-          className="
-            mt-4
-            [font-family:var(--font-body)]
-            leading-relaxed
-            text-[var(--color-text-primary)]
-            font-light
-          "
-          style={{
-            fontSize: "var(--text-body)"
-          }}
-        >
-          {article.summary || "No summary available."}
-        </p>
-
-        {/* ARTICLE LINK */}
-        <a
-          href={article.url || "#"}
-          target="_blank"
-          rel="noreferrer"
-
-          className="
-            mt-4
-            inline-block
-            [font-family:var(--font-body)]
-            underline
-            transition-opacity
-            duration-300
-            hover:opacity-70
-          "
-          style={{
-            fontSize: "var(--text-body)"
-          }}
-        >
-          View full article
-        </a>
 
         {/* BOTTOM NAV */}
         {!isPreview && (
-        <div className="mt-auto pt-5 flex items-center justify-between">
-
+        <div className="mt-auto pt-4 border-t border-black/5 flex items-center justify-between shrink-0">
             <button 
             onClick={onPrevious}
             className="
@@ -296,7 +292,6 @@ export default function ArticleCard({
             >
             Next →
             </button>
-
         </div>
         )}
       </div>

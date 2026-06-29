@@ -143,6 +143,7 @@ export default function AuthModal({
         className="
           w-full
           max-w-[420px]
+          mx-4
 
           rounded-[var(--radius-card)]
 
