@@ -13,7 +13,7 @@ from database.models import Article
 sys.path.append('../../CloudflareBypassForScraping_main')  # Go two levels up and then into the folder
 
 from CloudflareBypassForScraping_main.CloudflareBypasser import CloudflareBypasser 
-from DrissionPage import ChromiumPage
+from DrissionPage import ChromiumPage, ChromiumOptions
 from transformers import pipeline
 
 # Set up the summarization pipeline globally to avoid reinitialization in the loop
@@ -29,8 +29,17 @@ embedding_model = SentenceTransformer("BAAI/bge-small-en-v1.5")
 Session = sessionmaker(bind=engine)
 
 def start_browser():
-    # Initialize ChromiumPage
-    driver = ChromiumPage()
+    import os
+    co = ChromiumOptions()
+    # Add head-mode flags if running in GitHub Actions or CI environment
+    if os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("CI") == "true":
+        co.set_argument('--headless=new')
+        co.set_argument('--no-sandbox')
+        co.set_argument('--disable-gpu')
+        co.set_argument('--disable-dev-shm-usage')
+
+    # Initialize ChromiumPage with options
+    driver = ChromiumPage(addr_or_opts=co)
     driver.get('http://www.morningbrew.com/tag/tech')
 
     # Bypass Cloudflare protection
